@@ -1,0 +1,13 @@
+{
+  "nom_modele": "deeplabv3",
+  "architecture": "DeepLabV3 + MobileNetV2",
+  "miou_validation": 0.6469096126720347,
+  "dice_validation": 0.7279796926367981,
+  "perte_validation": 0.2179650113286588,
+  "precision_pixel_validation": 0.9225261589424723,
+  "temps_entrainement_secondes": 25986.87949214301,
+  "meilleure_epoque": 31,
+  "run_id": "7c311620e6ae4ca9af1adec8edf64fbd",
+  "chemin_poids": "/home/david/future_vision_transport_xpu/.artifacts_segmentation/deeplabv3/meilleurs_poids.pt",
+  "peripherique": "xpu"
+}

@@ -1,0 +1,13 @@
+{
+  "nom_modele": "segformer",
+  "architecture": "SegFormer MiT-B0",
+  "miou_validation": 0.6699318222324432,
+  "dice_validation": 0.7509531099374525,
+  "perte_validation": 0.2007334301585719,
+  "precision_pixel_validation": 0.9290844664077631,
+  "temps_entrainement_secondes": 14906.835312932002,
+  "meilleure_epoque": 19,
+  "run_id": "2228a39c29124783988ac1c2702f3f80",
+  "chemin_poids": "/home/david/future_vision_transport_xpu/.artifacts_segmentation/segformer/meilleurs_poids.pt",
+  "peripherique": "xpu"
+}

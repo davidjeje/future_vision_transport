@@ -1,0 +1,13 @@
+{
+  "nom_modele": "unet_baseline",
+  "architecture": "U-Net baseline",
+  "miou_validation": 0.6616523100220455,
+  "dice_validation": 0.7481243540949021,
+  "perte_validation": 0.2419519123415019,
+  "precision_pixel_validation": 0.9180376517692669,
+  "temps_entrainement_secondes": 2771.5976457569996,
+  "meilleure_epoque": 18,
+  "run_id": "b373a04419044138a38181aaaca773e9",
+  "chemin_poids": "/home/david/future_vision_transport_xpu/.artifacts_segmentation/unet_baseline/meilleurs_poids.pt",
+  "peripherique": "xpu"
+}
