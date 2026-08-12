@@ -49,6 +49,9 @@ data/
 *.ckpt
 *.onnx
 
+# Mais conserve le modèle de production
+!api/model/meilleurs_poids.pt
+
 # ===========================
 # Logs
 # ===========================
