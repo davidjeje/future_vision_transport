@@ -1,0 +1,49 @@
+{
+  "nom_modele": "unet_mobilenetv2",
+  "architecture": "U-Net + MobileNetV2",
+
+  "nombre_classes": 8,
+  "largeur_image": 256,
+  "hauteur_image": 128,
+
+  "classes": [
+    "vide",
+    "plat",
+    "construction",
+    "objet",
+    "nature",
+    "ciel",
+    "humain",
+    "vehicule"
+  ],
+
+  "preprocessing": {
+    "mode_couleur": "RGB",
+    "normalisation": "division_par_255",
+    "format_tenseur": "CHW",
+    "interpolation_image": "INTER_LINEAR",
+    "interpolation_masque": "INTER_NEAREST"
+  },
+
+  "run_id": "325e42b82ae64fa09e57dc134ad4e901",
+
+  "metriques_validation": {
+    "miou": 0.7026506291154422,
+    "dice": 0.786283837157694,
+    "perte": 0.19468517641493138,
+    "precision_pixel": 0.9319270429195173
+  },
+
+  "entrainement": {
+    "meilleure_epoque": 28,
+    "taille_lot": 4,
+    "taux_apprentissage": 0.0001,
+    "nombre_epoques_maximum": 30,
+    "augmentation": true,
+    "graine": 42,
+    "images_entrainement": 2379,
+    "images_validation": 595,
+    "peripherique": "xpu",
+    "temps_entrainement_secondes": 7088.748384682
+  }
+}
