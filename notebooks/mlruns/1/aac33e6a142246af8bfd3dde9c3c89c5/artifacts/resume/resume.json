@@ -1,0 +1,13 @@
+{
+  "nom_modele": "unet_mobilenetv2_weighted",
+  "architecture": "U-Net + MobileNetV2",
+  "miou_validation": 0.668183270491647,
+  "dice_validation": 0.764783696962386,
+  "perte_validation": 0.3711202407643299,
+  "precision_pixel_validation": 0.902633931812824,
+  "temps_entrainement_secondes": 5351.895878234995,
+  "meilleure_epoque": 16,
+  "run_id": "aac33e6a142246af8bfd3dde9c3c89c5",
+  "chemin_poids": "/home/david/future_vision_transport_xpu/.artifacts_segmentation/unet_mobilenetv2_weighted/meilleurs_poids.pt",
+  "peripherique": "xpu"
+}
