@@ -538,45 +538,79 @@ def executer_epoque(
         desc=description,
         total=len(chargeur),
         leave=False,
+        mininterval=1.0,
+        dynamic_ncols=True,
     )
 
     with contexte:
-        for images, masques in barre_progression:
+        for numero_batch, (images, masques) in enumerate(
+            barre_progression,
+            start=1,
+        ):
 
+            # ---------------------------------
             # Transfert vers le périphérique
-            images = images.to(peripherique)
-            masques = masques.to(peripherique)
+            # ---------------------------------
 
+            images = images.to(
+                peripherique
+            )
+
+            masques = masques.to(
+                peripherique
+            )
+
+            # ---------------------------------
             # Réinitialisation des gradients
+            # ---------------------------------
+
             if entrainement:
                 optimiseur.zero_grad(
                     set_to_none=True
                 )
 
+            # ---------------------------------
             # Forward
-            sortie = modele(images)
+            # ---------------------------------
+
+            sortie = modele(
+                images
+            )
 
             logits = extraire_logits(
                 sortie,
                 masques.shape[-2:],
             )
 
+            # ---------------------------------
             # Fonction de perte
+            # ---------------------------------
+
             perte = fonction_perte(
                 logits,
                 masques,
             )
 
-            # Backpropagation uniquement
-            # pendant l'entraînement
+            # ---------------------------------
+            # Backpropagation
+            # ---------------------------------
+
             if entrainement:
                 perte.backward()
                 optimiseur.step()
 
-            # Prédiction des classes
-            predictions = logits.argmax(dim=1)
+            # ---------------------------------
+            # Prédictions
+            # ---------------------------------
 
+            predictions = logits.argmax(
+                dim=1
+            )
+
+            # ---------------------------------
             # Calcul des métriques
+            # ---------------------------------
+
             (
                 s_miou,
                 s_dice,
@@ -587,7 +621,6 @@ def executer_epoque(
                 nombre_classes,
             )
 
-            # Sauvegarde des métriques
             pertes.append(
                 perte.item()
             )
@@ -604,12 +637,34 @@ def executer_epoque(
                 s_precision
             )
 
-            # Affichage dynamique dans tqdm
-            barre_progression.set_postfix(
-                perte=f"{perte.item():.4f}",
-                miou=f"{s_miou:.4f}",
-                dice=f"{s_dice:.4f}",
-            )
+            # ---------------------------------
+            # Mise à jour limitée de tqdm
+            # ---------------------------------
+            #
+            # On évite une mise à jour à chaque
+            # batch pour ne pas saturer Jupyter.
+            # ---------------------------------
+
+            if (
+                numero_batch % 10 == 0
+                or numero_batch == len(chargeur)
+            ):
+                barre_progression.set_postfix(
+                    perte=f"{np.mean(pertes):.4f}",
+                    miou=f"{np.mean(miou):.4f}",
+                    dice=f"{np.mean(dice):.4f}",
+                    refresh=False,
+                )
+
+    # ---------------------------------
+    # Fermeture propre de la barre
+    # ---------------------------------
+
+    barre_progression.close()
+
+    # ---------------------------------
+    # Résultats de l'époque
+    # ---------------------------------
 
     return {
         "perte": float(
@@ -640,6 +695,7 @@ def entrainer_modele_mlflow(
     patience: int,
     dossier_artifacts: Path,
     parametres: dict,
+    poids_classes: torch.Tensor | None = None,
 ):
     dossier_modele = (
         dossier_artifacts / nom_modele
@@ -652,9 +708,19 @@ def entrainer_modele_mlflow(
 
     modele = modele.to(peripherique)
 
-    fonction_perte = nn.CrossEntropyLoss(
-        ignore_index=0
-    )
+    if poids_classes is None:
+        fonction_perte = nn.CrossEntropyLoss(
+            ignore_index=0
+        )
+    else:
+        poids_classes = poids_classes.to(
+            peripherique
+        )
+
+        fonction_perte = nn.CrossEntropyLoss(
+            weight=poids_classes,
+            ignore_index=0,
+        )
 
     optimiseur = torch.optim.AdamW(
         modele.parameters(),
